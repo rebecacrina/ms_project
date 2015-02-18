@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import static mini_project.ImagesHolder.Image;
 public class Board {
 
-	Field[][] fields;
+	private Field[][] fields;
 	private int count = 0; // variable used for counting bombs
 	int bombsRemaining; // counting the number of bombs placed
 	private int randomXCoordinate, randomYCoordinate; // random coordinates for
@@ -54,6 +54,9 @@ public class Board {
 		while (count < numberOfBombs) {
 			randomXCoordinate = (int) (Math.random() * (rows));
 			randomYCoordinate = (int) (Math.random() * (columns));
+			// TODO: never write an "if" statement like this.
+			// if(!fields[...]) <-- that's it!
+			// never do if(cond == true) or if(cond == false). bad practice
 			if (fields[randomXCoordinate][randomYCoordinate].isBomb() == false) {
 				placeBomb(fields, randomXCoordinate, randomYCoordinate);
 				count++;
@@ -297,6 +300,8 @@ public class Board {
 	 * @param y
 	 *            the coordinates for the field
 	 */
+	//TODO: Java uses lower case first letter for methods and variables
+	// 		C#   uses upper case first letter for methods and variables
 	public void CheckSurroudingFieldForZeroAndExpose(int x, int y) {
 		for (int q = x - 1; q <= x + 1; q++) {
 			for (int w = y - 1; w <= y + 1; w++) {

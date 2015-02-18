@@ -57,6 +57,15 @@ public class Field {
 	 * @param mainPanel
 	 *            create a field button and adds it to the mainPanel
 	 */
+
+	// TODO: this is usually bad in practice because now you can't really reuse
+	// this "Field" class for anything except when also using a JPanel. What if
+	// I want to add it to something else? furthermore, is this really needed?
+	// Why not extend JButton and then you can simply do mainPanel.add(field)
+	// directly
+	// => no more need for this nasty constructor
+	// so try this, for a change. extend JButton and see what else you need to modify in your code. 
+	// does it make it cleaner?
 	public Field(JPanel mainPanel) {
 		button = new JButton();
 		mainPanel.add(button);

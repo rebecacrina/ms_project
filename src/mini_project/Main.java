@@ -148,8 +148,12 @@ public class Main extends JApplet {
 		board.bombsRemaining = numberOfBombs;
 		remainingBombsLabel.setText("  "
 				+ Integer.toString(board.bombsRemaining) + "  bombs  ");
-
-		// cool never used foreach for a matrix before
+		
+		// TODO: the code bellow will not give you errors, yes!
+		// what I want you to do is move this whole logic in the Board class where it actually belongs.
+		// I don't think the 'main' class should know so much about the 'board' class. it should only 
+		// be able to call a method like board.restartGame(...) and not have to deal with all this logic
+		// this way, you hide "fields" with the 'private' access modifier
 		for (Field[] x : board.fields) {
 			for (Field f : x) {
 				mainPanel.remove(f.button);
