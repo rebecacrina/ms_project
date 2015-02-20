@@ -146,36 +146,12 @@ public class Main extends JApplet {
 		grid.setColumns(board.columns);
 
 		board.bombsRemaining = numberOfBombs;
-		remainingBombsLabel.setText("  "
-				+ Integer.toString(board.bombsRemaining) + "  bombs  ");
-		
-		// TODO: the code bellow will not give you errors, yes!
-		// what I want you to do is move this whole logic in the Board class where it actually belongs.
-		// I don't think the 'main' class should know so much about the 'board' class. it should only 
-		// be able to call a method like board.restartGame(...) and not have to deal with all this logic
-		// this way, you hide "fields" with the 'private' access modifier
-		for (Field[] x : board.fields) {
-			for (Field f : x) {
-				mainPanel.remove(f.button);
-			}
-		}
+		remainingBombsLabel.setText("  " + Integer.toString(board.bombsRemaining) + "  bombs  ");
+		board.removeAllButtons(mainPanel);
 		board = new Board(remainingBombsLabel, mainPanel, rows, columns,
 				numberOfBombs);
-
-		for (Field[] x : board.fields) {
-			for (Field f : x) {
-				initButton(f.button);
-			}
-		}
+		board.addAllButtons(mainPanel);
 		setSize(sizex, sizey);
-		invalidate();
-		validate();
-
-	}
-
-	private void initButton(JButton button) {
-		button.setEnabled(true);
-		button.setText("");
-		button.setBackground(Color.gray);
+		
 	}
 }
