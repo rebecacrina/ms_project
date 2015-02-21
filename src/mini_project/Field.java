@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.JButton;
 
 public class Field extends JButton {
+	private static final long serialVersionUID = 1L;
 	private boolean bomb;
 	private boolean flag;
 	private boolean checkIfWon;

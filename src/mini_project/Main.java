@@ -35,13 +35,12 @@ public class Main extends JApplet {
 			for (int i = 0; i < restartButtons.length; i++) {
 				if (e.getSource() == restartButtons[i]) {
 
-					board.rows = GCs[i].getBoardRows();
-					board.columns = GCs[i].getBoardColumns();
+					board.setRows(GCs[i].getBoardRows());
+					board.setColumns(GCs[i].getBoardColumns());
 					numberOfBombs = GCs[i].getNumberOfBombs();
 					sizeX = GCs[i].getSizeX();
 					sizeY = GCs[i].getSizeY();
-					restartGame(board.rows, board.columns, numberOfBombs,
-							sizeX, sizeY);
+					restartGame(board.getRows(), board.getColumns(), numberOfBombs, sizeX, sizeY);
 				}
 			}
 		}
@@ -77,14 +76,13 @@ public class Main extends JApplet {
 	 */
 	public void init() {
 		setLayout(new BorderLayout());
-		setInitialDifficulty(Difficulties.HARD.ordinal()); 
+		setInitialDifficulty(Difficulties.HARD.ordinal());
 		remainingBombsLabel = new JLabel();
 		grid = new GridLayout(rows, columns);
 		mainPanel = new JPanel(grid);
 		font = new Font("ComicSans", Font.BOLD, 18);
 		setFont(font);
-		board = new Board(remainingBombsLabel, mainPanel, rows, columns,
-				numberOfBombs);
+		board = new Board(remainingBombsLabel, mainPanel, rows, columns, numberOfBombs);
 		panel = new JPanel(new BorderLayout());
 		newGamePanel = new JPanel();
 		newGameLabel = new JLabel("New Game");
@@ -139,19 +137,17 @@ public class Main extends JApplet {
 	 * @param sizey
 	 *            the newly values corresponding to the difficulty level
 	 */
-	public void restartGame(int rows, int columns, int numberOfBombs,
-			int sizex, int sizey) {
+	public void restartGame(int rows, int columns, int numberOfBombs, int sizex, int sizey) {
 		setSize(sizex, sizey);
-		grid.setRows(board.rows);
-		grid.setColumns(board.columns);
+		grid.setRows(board.getRows());
+		grid.setColumns(board.getColumns());
 
-		board.bombsRemaining = numberOfBombs;
-		remainingBombsLabel.setText("  " + Integer.toString(board.bombsRemaining) + "  bombs  ");
+		board.setBombsRemaining(numberOfBombs);
+		remainingBombsLabel.setText("  " + Integer.toString(board.getBombsRemaining()) + "  bombs  ");
 		board.removeAllButtons(mainPanel);
-		board = new Board(remainingBombsLabel, mainPanel, rows, columns,
-				numberOfBombs);
+		board = new Board(remainingBombsLabel, mainPanel, rows, columns, numberOfBombs);
 		board.addAllButtons(mainPanel);
 		setSize(sizex, sizey);
-		
+
 	}
 }

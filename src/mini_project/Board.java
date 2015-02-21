@@ -10,14 +10,24 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import static mini_project.ImagesHolder.Image;
+
 public class Board {
 
 	private Field[][] fields;
+	
+	// TODO: maybe bombsCount?
 	private int count = 0; // variable used for counting bombs
-	int bombsRemaining; // counting the number of bombs placed
+	private int bombsRemaining; // counting the number of bombs placed
+	
+	// TODO: these certainly do not have to be class variables
 	private int randomXCoordinate, randomYCoordinate; // random coordinates for
-	private JOptionPane frame = new JOptionPane();													// bombs
-	int columns, rows, numberOfBombs; // number of rows, columns, and bombs
+	
+	// TODO: also, this does not have to be a class variable
+	private JOptionPane frame = new JOptionPane(); 
+	private int columns, rows; // number of rows, columns, and bombs
+
+	// TODO: yes, but it's a label, try renaming it to labelBombs or bombsLabel
+	// or something, else it might be confusing
 	private JLabel bombs; // panel where the number of bombs remained is shown
 
 	/**
@@ -36,14 +46,15 @@ public class Board {
 	 *            for the number of bombs
 	 */
 
-	public Board(JLabel bombs, JPanel mainPanel, int rows, int columns,
-			int numberOfBombs) {
+	public Board(JLabel bombs, JPanel mainPanel, int rows, int columns, int numberOfBombs) {
 		this.bombs = bombs;
-		this.columns = columns;
-		this.rows = rows;
-		this.numberOfBombs = numberOfBombs;
-		bombsRemaining = numberOfBombs;
+		this.setColumns(columns);
+		this.setRows(rows);
+		setBombsRemaining(numberOfBombs);
 		fields = new Field[rows][columns];
+
+		// TODO: move all the code bellow in a separate method and dispose of
+		// the "initField" method
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				fields[i][j] = new Field();
@@ -65,20 +76,23 @@ public class Board {
 	 * class for field that implements MouseListener must implement/override the
 	 * all methods
 	 */
-	public  void addAllButtons(JPanel mainPanel){
+	public void addAllButtons(JPanel mainPanel) {
 		for (Field[] x : fields) {
 			for (Field f : x) {
 				mainPanel.add(f);
 			}
 		}
 	}
-	public void removeAllButtons(JPanel mainPanel){
+
+	public void removeAllButtons(JPanel mainPanel) {
 		for (Field[] x : fields) {
 			for (Field f : x) {
 				mainPanel.remove(f);
 			}
 		}
 	}
+
+	// TODO: method does only one thing. not really worth having it
 	public void initField(Field f) {
 		f.addMouseListener(new ClassThatListensToTheFieldButtons());
 	}
@@ -88,54 +102,48 @@ public class Board {
 		fields[x][x].setCheckIfWon(true);
 	}
 
+	// TODO: no comments. let the code talk for itself
 	class ClassThatListensToTheFieldButtons implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			boolean gameOver = false; // boolean variable set if there is a game
-										// over or not
-			for (int x = 0; x < rows; x++) {
-				for (int y = 0; y < columns; y++) {
+			boolean gameOver = false;
+			for (int x = 0; x < getRows(); x++) {
+				for (int y = 0; y < getColumns(); y++) {
 					if (e.getSource() == fields[x][y]) {
-						if (e.getButton() == MouseEvent.BUTTON1  && !fields[x][y].isFlag()) // if left click, and there is no flag on the button
-						{
-							if (fields[x][y].isBomb()) // if you you click on a bomb, results in game over
-							{
-								fields[x][y].setIcon(new ImageIcon(	"images/bomba.png"));
-								gameOverLost(); // the gameOverLost method is called
+						if (e.getButton() == MouseEvent.BUTTON1 && !fields[x][y].isFlag()) {
+							if (fields[x][y].isBomb()) {
+								fields[x][y].setIcon(new ImageIcon("images/bomba.png"));
+								gameOverLost();
 								gameOver = true;
 								break;
 							}
-							// otherwise there is a number so the field will be simply exposed
 							fields[x][y].setExposed(true);
-							fields[x][y].setCheckIfWon(true); // this set to true means that the button has been clicked
+							fields[x][y].setCheckIfWon(true);
 							setImage(fields[x][y], surroundingBombs(x, y));
 
 							if (surroundingBombs(x, y) == 0) {
-								checkZeroAndExpose(x, y); 						
+								checkZeroAndExpose(x, y);
 							}
-						} 
-						else if (e.getButton() == MouseEvent.BUTTON3) // if it is a right click
-						{
-							if (fields[x][y].isFlag()) // if there is a flag already present set it so that there is no flag							
-							{
+						} else if (e.getButton() == MouseEvent.BUTTON3) {
+							if (fields[x][y].isFlag()) {
 								fields[x][y].setIcon(null);
 								fields[x][y].setText("");
-								fields[x][y].setFlag(false); // no flag
+								fields[x][y].setFlag(false);
 								fields[x][y].setCheckIfWon(false);
-								bombsRemaining++; 
+								setBombsRemaining(getBombsRemaining() + 1);
 							}
-							// else there is bomb, or a number but no flag, set flag is allowed
-							else if (!fields[x][y].isCheckIfWon() || fields[x][y].isBomb()) // if there is no flag, set it so there is a flag		
-							{
+
+							else if (!fields[x][y].isCheckIfWon() || fields[x][y].isBomb()) {
 								fields[x][y].setIcon(new ImageIcon("images/flag.png"));
 								fields[x][y].setFlag(true);
-								fields[x][y].setCheckIfWon(true); // because we know that there is a bomb or a number							
-								bombsRemaining--;
+								fields[x][y].setCheckIfWon(true);
+								setBombsRemaining(getBombsRemaining() - 1);
 							}
-							bombs.setText("  " + Integer.toString(bombsRemaining) + "  bombs  ");
+							bombs.setText("  " + Integer.toString(getBombsRemaining()) + "  bombs  ");
 						}
-						if (gameOver == false) // this just calls the method for changing the colors of the buttons if they have been clicked
+						// TODO: uhm..stii tu.
+						if (gameOver == false)
 							clickedNoFlagNoBomb();
 					}
 				}
@@ -170,28 +178,28 @@ public class Board {
 	}
 
 	public void setImage(Field f, int number) {
-		if(number!=0)
-			f.setIcon(Image[number-1]);
+		if (number != 0)
+			f.setIcon(Image[number - 1]);
 		else
 			f.setText("");
 	}
-		
+
 	/**
 	 * changes the color of the buttons and if [x][y] is "0" set the label to
 	 * nothing
 	 */
 	public void clickedNoFlagNoBomb() {
-		for (Field[] x: fields) {
+		for (Field[] x : fields) {
 			for (Field f : x) {
-				if (f.isCheckIfWon() &&  !f.isFlag() && !f.isBomb())
+				if (f.isCheckIfWon() && !f.isFlag() && !f.isBomb())
 					f.setBackground(Color.darkGray);
 			}
 		}
 	}
 
 	/**
-	 * checks surrounding 8 squares for number of bombs (it does include
-	 * itself, but has already been checked for a bomb so it won't matter)
+	 * checks surrounding 8 squares for number of bombs (it does include itself,
+	 * but has already been checked for a bomb so it won't matter)
 	 * 
 	 * @param x
 	 * @param y
@@ -203,8 +211,9 @@ public class Board {
 		int surroundingBombs = 0;
 		for (int q = x - 1; q <= x + 1; q++) {
 			for (int w = y - 1; w <= y + 1; w++) {
-				while (true) {// makes sure that it wont have an error for buttons next to the wall
-					if (q < 0 || w < 0 || q >= rows || w >= columns)
+				while (true) {// makes sure that it wont have an error for
+								// buttons next to the wall
+					if (q < 0 || w < 0 || q >= getRows() || w >= getColumns())
 						break;
 					if (fields[q][w].isBomb())
 						surroundingBombs++;
@@ -216,7 +225,7 @@ public class Board {
 	}
 
 	/**
-	 *  exposes the surrounding 8 buttons, because the field has
+	 * exposes the surrounding 8 buttons, because the field has
 	 * surroungdingBomms = 0, which means there is no bomb can be exposed
 	 * 
 	 * @param x
@@ -228,13 +237,14 @@ public class Board {
 		fields[x][y].setExposed(true);
 		for (int q = x - 1; q <= x + 1; q++) {
 			for (int w = y - 1; w <= y + 1; w++) {
-				while (true) {	// makes sure that it wont have an error for buttons next to the wall
-					if (q < 0 || w < 0 || q >= rows || w >= columns)
+				while (true) { // makes sure that it wont have an error for
+								// buttons next to the wall
+					if (q < 0 || w < 0 || q >= getRows() || w >= getColumns())
 						break;
 					if (fields[q][w].isFlag())
 						break;
 					fields[q][w].setCheckIfWon(true);
-					setImage(fields[q][w], surroundingBombs(q,w));
+					setImage(fields[q][w], surroundingBombs(q, w));
 					break;
 				}
 			}
@@ -256,7 +266,7 @@ public class Board {
 				while (true) {
 					// makes sure that it wont have an error for buttons next to
 					// the wall
-					if (q < 0 || w < 0 || q >= rows || w >= columns)
+					if (q < 0 || w < 0 || q >= getRows() || w >= getColumns())
 						break;
 					if (fields[q][w].isFlag())
 						break;
@@ -283,16 +293,17 @@ public class Board {
 		exposeTheSurroundingFields(x, y);
 		checkSurroudingFieldForZeroAndExpose(x, y);
 	}
-	
+
 	/**
 	 * checks if all the button without bombs have been pressed If so the game
 	 * is won
 	 */
 	public void checkPressedButtonsWin() {
 		boolean allExposed = true;
-		for (Field[] x: fields) {
-			for (Field f: x) {// if there is a flag and no bomb => all are not exposed
-				if (f.isFlag() && !f.isBomb() ) {
+		for (Field[] x : fields) {
+			for (Field f : x) {// if there is a flag and no bomb => all are not
+								// exposed
+				if (f.isFlag() && !f.isBomb()) {
 					allExposed = false;
 				}
 				if (!f.isCheckIfWon()) {
@@ -310,29 +321,50 @@ public class Board {
 	 * this method is called if bomb is clicked or on the double click if flag
 	 * is not on a bomb this method exposes all bombs and a message will appear
 	 */
-	public void gameOverWon(){
+	public void gameOverWon() {
 		gameOverExposeAllBombs();
-		JOptionPane.showMessageDialog(this.frame,
-				"Gongratulations! You won!", "Game won!",
-				JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(this.frame, "Gongratulations! You won!", "Game won!", JOptionPane.PLAIN_MESSAGE);
 	}
-	
+
 	public void gameOverLost() {
 		gameOverExposeAllBombs();
-		JOptionPane.showMessageDialog(	this.frame,
-						"Sorry, but you lost!",
-						"Game lost!", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(this.frame, "Sorry, but you lost!", "Game lost!", JOptionPane.PLAIN_MESSAGE);
 	}
-	
-	public void gameOverExposeAllBombs(){
+
+	public void gameOverExposeAllBombs() {
 		for (Field[] x : fields) {
 			for (Field f : x) {
 				if (f.isBomb()) {
-					f.setIcon(new ImageIcon(	"images/bomba.png"));
+					f.setIcon(new ImageIcon("images/bomba.png"));
 					f.setBackground(Color.red);
-				} else	/// disable all buttons
+				} else
+					// / disable all buttons
 					f.setEnabled(false);
 			}
 		}
+	}
+
+	public int getColumns() {
+		return columns;
+	}
+
+	public void setColumns(int columns) {
+		this.columns = columns;
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	public int getBombsRemaining() {
+		return bombsRemaining;
+	}
+
+	public void setBombsRemaining(int bombsRemaining) {
+		this.bombsRemaining = bombsRemaining;
 	}
 }
