@@ -17,6 +17,9 @@ import javax.swing.JPanel;
  *         checking if game is over)
  */
 public class Field extends JButton{
+	// TODO: ce te bat!
+	// de ce mai ai nevoie de un buton aici daca clasa ta extinde JButton?
+	// poti sa o folosesti direct ca pe un buton, cu .. extra stuff!!
 	JButton button  = new JButton();
 	private boolean bomb;
 	private boolean flag;
