@@ -3,24 +3,8 @@ package mini_project;
 import java.awt.Color;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
-//pai bine venisem cu stick-ul meu de la dsd obs si guess what am auzit ca e plin de virusi pe acolo si noah am intrebat-o pe o colega de camera mai naiva d
 
-/**
- * 1
- * 
- * @author rebeca class of fields, the little buttons in the grid each has four
- *         boolean characteristics bomb = true if is a bomb flag = true if the
- *         flag was set exposed = true if the button was exposed checkIfWon =
- *         these set to true mean that the button has been clicked, if [x][y] =
- *         true then the button has a number on it or it is a bomb (used for
- *         checking if game is over)
- */
-public class Field extends JButton{
-	// TODO: ce te bat!
-	// de ce mai ai nevoie de un buton aici daca clasa ta extinde JButton?
-	// poti sa o folosesti direct ca pe un buton, cu .. extra stuff!!
-	JButton button  = new JButton();
+public class Field extends JButton {
 	private boolean bomb;
 	private boolean flag;
 	private boolean checkIfWon;
@@ -53,15 +37,14 @@ public class Field extends JButton{
 	public boolean isCheckIfWon() {
 		return checkIfWon;
 	}
-	
+
 	public void setCheckIfWon(boolean checkIfWon) {
 		this.checkIfWon = checkIfWon;
 	}
-		
-	public Field(){
-		this.button = new JButton();
-		button.setEnabled(true);
-		button.setText("");
-		button.setBackground(Color.gray);
+
+	public Field() {
+		setEnabled(true);
+		setText("");
+		setBackground(Color.gray);
 	}
 }

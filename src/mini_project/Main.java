@@ -77,7 +77,7 @@ public class Main extends JApplet {
 	 */
 	public void init() {
 		setLayout(new BorderLayout());
-		setInitialDifficulty(Difficulties.HARD.ordinal()); // hmmm super tare
+		setInitialDifficulty(Difficulties.HARD.ordinal()); 
 		remainingBombsLabel = new JLabel();
 		grid = new GridLayout(rows, columns);
 		mainPanel = new JPanel(grid);
