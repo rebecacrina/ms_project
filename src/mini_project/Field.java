@@ -8,7 +8,6 @@ public class Field extends JButton {
 	private static final long serialVersionUID = 1L;
 	private boolean bomb;
 	private boolean flag;
-	private boolean checkIfWon;
 	private boolean exposed;
 
 	public boolean isFlag() {
@@ -34,15 +33,10 @@ public class Field extends JButton {
 	public void setExposed(boolean exposed) {
 		this.exposed = exposed;
 	}
-
-	public boolean isCheckIfWon() {
-		return checkIfWon;
+	
+	public boolean isFlagAndBomb(){ 
+		return isFlag() && isBomb();
 	}
-
-	public void setCheckIfWon(boolean checkIfWon) {
-		this.checkIfWon = checkIfWon;
-	}
-
 	public Field() {
 		setEnabled(true);
 		setText("");
